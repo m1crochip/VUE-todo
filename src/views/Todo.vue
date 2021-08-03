@@ -1,73 +1,48 @@
 <template>
-  <h1>Vue Todo</h1>
-  <form @submit.prevent="addNewTodo">
-    <lable>Input Your List</lable>
-    <input v-model="newTodo" name="newTodo">
-    <button>Add new Todo</button>
-  </form>
-  <ul>
-  <li v-for="todo in todos" :key="todo.id">
-    <h3 :class="{done : todo.done}" @click="toggleDone(todo)" class="todo">{{todo.content}}</h3>
-    <button @click="removeTodo(index)">remove</button>
-  </li>
-  </ul>
+  <div class="todo-page">
+    <h3>Todopage</h3>
+    <form @submit.prevent="addNewTodo">
+      <input placeholder="Please Type some thing...." v-model="newTodo">
+      <button type="submit">Add</button>
+    </form>
+    <Todolist :todos="todos"/>
+  </div>
 </template>
 
 <script>
-import { ref } from 'vue';
+import Todolist from '../components/Todolist.vue';
 
 export default {
-  setup() {
-    const newTodo = ref('')
-    const todos = ref([]);
-
-    function addNewTodo() {
-      todos.value.push({
-        id: Date.now(),
+  components:{
+    Todolist,
+  },
+  data() {
+    return{
+      todos:[],
+      newTodo:"",
+    }
+  },
+  methods: {
+    addNewTodo(){
+      this.todos.push({
+        id:Date.now(),
         done: false,
-        content : newTodo.value,
+        content: this.newTodo
       });
-      newTodo.value = '';
+      console.log(this.todos);
+      this.newTodo = "";
     }
-
-    function toggleDone(todo) {
-      todo.done = !todo.done;
-    }
-
-    function removeTodo(index) {
-      todos.value.splice(index, 1);
-    }
-    return {
-      todos,
-      newTodo,
-      addNewTodo,
-      toggleDone,
-      removeTodo,
-    }
-  }
+  },
 }
 </script>
 
 <style>
-body {
-  font-family: sans-serif;
-  padding-top: 1em;
-  padding-bottom: 1em;
-  font-size: 2em;
-  width: 80%;
-  margin: 0 auto;
-}
-input, textarea, button, p, div, section, article, select {
-  display: 'block';
+.todo-page {
   width: 100%;
-  font-family: sans-serif;
-  font-size: 1em;
-  margin: 0.5em;
+  display: flex;
+  padding-top: 160px;
+  flex-direction: column;
+  align-items: center;
 }
-.todo {
-  cursor: pointer;
-}
-.done {
-  text-decoration: line-through;
-}
+
 </style>
